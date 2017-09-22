@@ -8,12 +8,14 @@
 import pandas as pd
 # module to read arguments
 import sys
-
+# check if the input is right
 if len(sys.argv) < 2:
 	print("Error: the program has less than 1 argument.")
 	print("Usage: python adaline.py <file>")
-	sys.exit()
-
+	sys.exit(2)
+if ".csv" is not str(sys.argv[1]):
+	print("Error: that's not a csv file.")
+	sys.exit(2)
 print("File: " + str(sys.argv[1]))
 # Read the CSV into a panda's data frame (df)
 dataFrame = pd.read_csv(str(sys.argv[1]), delimiter=',')
