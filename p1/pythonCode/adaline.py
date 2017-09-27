@@ -1,7 +1,16 @@
-# Author: Jorge Hevia Moreno
-# Contac: jmhev@outlook.com
+	# Author: Jorge Hevia Moreno
+# Contact: jmhev@outlook.com
 # File: this file provides the functions needed to import
 #		data from a csv file and use it
+
+
+################################################################################################################
+################################################################################################################
+# ERROR TREATMENT AND INITIAL READS
+################################################################################################################
+################################################################################################################
+
+
 
 # library so we can read a csv 
 # Installation: sudo pip install pandas
@@ -11,9 +20,9 @@ import sys
 # mathematical module so we can use random numbers
 import numpy as np
 # check if the input is right
-if len(sys.argv) < 2:
-	print("Error: the program has less than 1 argument.")
-	print("Usage: python adaline.py <file>")
+if len(sys.argv) < 3:
+	print("Error: the program has less than 2 arguments.")
+	print("Usage: python adaline.py <file> <number of inputs/weights>")
 	sys.exit(2)
 
 if ".csv" not in str(sys.argv[1]):
@@ -25,8 +34,8 @@ print("File: " + str(sys.argv[1]))
 dataFrame = pd.read_csv(str(sys.argv[1]), delimiter=',')
 
 # Export it as a list of tuples
-data = [tuple(x) for x in dataFrame.values]
-
+data = [np.matrix(x) for x in dataFrame.values]
+print(dataFrame.values)
 
 # ADALINE MODUS OPERANDI
 '''
@@ -39,10 +48,17 @@ data = [tuple(x) for x in dataFrame.values]
  7) Repeat 2-6 until input criteria is met
 '''
 
+################################################################################################################
+################################################################################################################
+# FUNCTION DEFINITIONS
+################################################################################################################
+################################################################################################################
+
+
 '''
 	Name: initializerWT
-	Function: it initializes the weights and threshold given
-	Input: weights tuple and threshold value
+	Function: it initializes with random values between -1.0 and 1.0 the weights and threshold given
+	Input: weights list and threshold value
 	Returns: weights tuple and threshold value (in that order)
 	TO-DO: use a heavier random generator
 '''
@@ -54,7 +70,40 @@ def initializeWT(weights, threshold):
 	print("Threshold initial random value is: "+str(threshold))
 	return weights, threshold
 
-w = [0.0, 0.0, 0.0, 0.0, 0.0]
+'''
+	Name: calculateOutput
+	Function: it calculates the output given the inputs from the 
+				csv file and some random weights
+	Input: data matrix and weights list
+	Returns: the outputs vector
+	TO-DO: the entire fucking function
+'''
+def calculateOutput(data, weights):
+	print("First 5 values from columns")
+	for x in xrange(0, 4):
+		print(data[0][x])
+
+
+################################################################################################################
+################################################################################################################
+# HERE'S WHERE THE MAGIC HAPPENS
+################################################################################################################
+################################################################################################################
+
+# first we create a lists of weights, outputs and desiredOutputs, then the treshold variable
+weights = []
+output = [] # output list with calculated values
+desiredOutput = [] # desired output list
 threshold = 0.0
 
-w, threshold = initializeWT(w, threshold)
+# and then initialize the weights list with the number of inputs
+for x in xrange(0, int(sys.argv[2])):
+	weights.append(0.0)
+
+inputs = []
+
+# Initialize weights and thresholds with random float numbers between -1 and 1
+weights, threshold = initializeWT(weights, threshold)
+
+# calculates output
+calculateOutput(data, weights)

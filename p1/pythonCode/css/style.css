@@ -1,0 +1,25 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+#inputs-table {
+	width: 100%;
+	float: left;
+}
+.inputs {
+	float: left;
+	margin-right: 10%;
+	margin-left: 10%;
+	margin-top: 10px;
+	width: 80%;
+}
