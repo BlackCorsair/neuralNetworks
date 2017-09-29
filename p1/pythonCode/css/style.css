@@ -1,20 +1,17 @@
 table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
 }
 
 td, th {
-    border: 1px solid #dddddd;
-    text-align: center;
-    padding: 8px;
+	border: 1px solid #dddddd;
+	text-align: center;
+	padding: 8px;
 }
 
 tr:nth-child(even) {
-    background-color: #dddddd;
-}
-#inputs-table {
-	width: 100%;
-	float: left;
+	background-color: #dddddd;
 }
 .inputs {
 	float: left;
