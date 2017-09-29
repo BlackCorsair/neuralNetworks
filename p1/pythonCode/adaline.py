@@ -68,23 +68,38 @@ def initializeWT(weights, threshold):
 	threshold = np.random.uniform(low=-1, high=(1))
 	print("Threshold initial random value is: "+str(threshold))
 	return weights, threshold
+def getRows(data):
+	# create a list of numpy arrays
+	# every np.array will contain a row
+	rows = []
+	for x in data.values:
+		rows.append(np.array(x))
+	return rows
+	#end
 
 '''
-	Name: calculateOutput
+	Name: calculateOutputPerRow
 	Function: it calculates the output given the inputs from the 
 				csv file and some random weights
-	Input: data matrix and weights list
-	Returns: the outputs vector
+	Input: row array, weights and threshold
+	Returns: the outputs (y) np.array
 	TO-DO: the entire fucking function
 '''
-def calculateOutput(data, weights):
-	# create a list of numpy arrays
-	# every np.array will contain a column
-	columnList = []
-	for x in dataFrame.columns.values:
-		columnList.append(np.array(dataFrame[x]))
-		
-	print(columnList[0])
+def calculateOutputPerRow(row, weights, threshold):
+	return row.dot(np.array(weights)) + threshold
+
+'''
+	Name: calculateError
+	Function: it calculates the total error given the inputs from the 
+				csv file and some random weights
+	Input: rows list, weights and threshold
+	Returns: the outputs (y) np.array
+	TO-DO: the entire fucking function
+'''
+def calculateError(rows, weights, threshold):
+	for x in rows:
+		output = calculateOutputPerRow(x[0:8], weights, threshold)
+		error = error + (x[9] - output)² # test this l
 
 ################################################################################################################
 ################################################################################################################
@@ -97,7 +112,6 @@ weights = []
 output = [] # output list with calculated values
 desiredOutput = [] # desired output list
 threshold = 0.0
-
 # and then initialize the weights list with the number of inputs
 for x in xrange(0, int(sys.argv[2])):
 	weights.append(0.0)
@@ -106,6 +120,6 @@ inputs = []
 
 # Initialize weights and thresholds with random float numbers between -1 and 1
 weights, threshold = initializeWT(weights, threshold)
-
-# calculates output
-calculateOutput(dataFrame, weights)
+rows = getRows(dataFrame)
+# calculates error
+calculateError(rows, weights, threshold)
