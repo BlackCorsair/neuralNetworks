@@ -35,7 +35,6 @@ dataFrame = pd.read_csv(str(sys.argv[1]), delimiter=',')
 
 # Export it as a list of tuples
 data = [np.matrix(x) for x in dataFrame.values]
-print(dataFrame.values)
 
 # ADALINE MODUS OPERANDI
 '''
@@ -79,10 +78,13 @@ def initializeWT(weights, threshold):
 	TO-DO: the entire fucking function
 '''
 def calculateOutput(data, weights):
-	print("First 5 values from columns")
-	for x in xrange(0, 4):
-		print(data[0][x])
-
+	# create a list of numpy arrays
+	# every np.array will contain a column
+	columnList = []
+	for x in dataFrame.columns.values:
+		columnList.append(np.array(dataFrame[x]))
+		
+	print(columnList[0])
 
 ################################################################################################################
 ################################################################################################################
@@ -106,4 +108,4 @@ inputs = []
 weights, threshold = initializeWT(weights, threshold)
 
 # calculates output
-calculateOutput(data, weights)
+calculateOutput(dataFrame, weights)
