@@ -83,7 +83,6 @@ def getRows(data):
 				csv file and some random weights
 	Input: row array, weights and threshold
 	Returns: the outputs (y) np.array
-	TO-DO: the entire fucking function
 '''
 def calculateOutputPerRow(row, weights, threshold):
 	return row.dot(np.array(weights)) + threshold
@@ -94,19 +93,37 @@ def calculateOutputPerRow(row, weights, threshold):
 				csv file and some random weights
 	Input: rows list, weights and threshold
 	Returns: the outputs (y) np.array
-	TO-DO: the entire fucking function
 '''
 def calculateError(rows, weights, threshold):
+	error = 0.0
 	for x in rows:
 		output = calculateOutputPerRow(x[0:8], weights, threshold)
-		error = error + (x[9] - output)² # test this l
-
+		error = error + (x[8] - output)**2 # test this line
+	error = error * 1/2 * 1/len(rows)
+	return error
+'''
+	Name: modifyWeights
+	Function: modifies the weights and threshold given the output
+				calculated from the row (also given)
+	Input: output calculated from row, row, weights vector, threhold, learnfactor
+	Returns: modified weights vector and threshold
+'''
+def modifyWeights(output, row, weights,  threshold, learnfactor):
+	weightsTemp = 0.0
+	learnedDiff = learnfactor * (row[8] - output)
+	for x in xrange(0, len(weights)):
+		weightsTemp = learnedDiff * row[x] # learnedDiff is calculated outside the loop for better performance
+		weights[x] = weights[x] + weightsTemp
+	threshold = threshold + learnedDiff
+	return weights, threshold
 ################################################################################################################
 ################################################################################################################
 # HERE'S WHERE THE MAGIC HAPPENS
 ################################################################################################################
 ################################################################################################################
 
+# learn factor
+learnfactor = 0.1
 # first we create a lists of weights, outputs and desiredOutputs, then the treshold variable
 weights = []
 output = [] # output list with calculated values
@@ -122,4 +139,13 @@ inputs = []
 weights, threshold = initializeWT(weights, threshold)
 rows = getRows(dataFrame)
 # calculates error
-calculateError(rows, weights, threshold)
+accumulatedError = calculateError(rows, weights, threshold)
+print(accumulatedError)
+
+output = calculateOutputPerRow(rows[0][0:8], weights, threshold)
+weights, threshold = modifyWeights(output, rows[0], weights, threshold, learnfactor)
+print("first weights calc: "+ str(weights))
+
+output = calculateOutputPerRow(rows[0][0:8], weights, threshold)
+weights, threshold = modifyWeights(output, rows[0], weights, threshold, learnfactor)
+print("second weights calc: "+ str(weights))
