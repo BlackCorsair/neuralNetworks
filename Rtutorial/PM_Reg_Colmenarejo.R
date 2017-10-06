@@ -6,21 +6,21 @@ set.seed(1)
 
 #Leer ficheros de los tres ficheros (cuidado con el formato)
 
-trainSet <- read.csv("Train.csv",dec=".",sep=",",header = F)
-validSet <- read.csv( "Validacion.csv",dec=".",sep=",",header = F)
-testSet  <- read.csv("Test.csv",dec=".",sep=",",header = F)
+trainSet <- read.csv("RandomizedDataTraining.csv",dec=".",sep=",",header = F)
+validSet <- read.csv( "RandomizedDataValidation.csv",dec=".",sep=",",header = F)
+testSet  <- read.csv("RandomizedDataTest.csv",dec=".",sep=",",header = F)
 
 
 #num de columna de salida
 target <- ncol(trainSet)
 
 #SELECCION DE LOS PARAMETROS DE LA RED
-topologia        <- c(50)   #una capa oculta de 50 neuronas. Más capas ej: c(20,10) 
+topologia        <- c(50)   #una capa oculta de 50 neuronas. M?s capas ej: c(20,10) 
 razonAprendizaje <- 0.2
 ciclosMaximos    <- 1000
 
 #EJECUCION DEL APRENDIZAJE Y GENERACION DEL MODELO
-# en Rsnns se llama test a nuestro fichero de validación
+# en Rsnns se llama test a nuestro fichero de validaci?n
 model <- mlp(x= trainSet[,-target],
              y= trainSet[, target],
              inputsTest=  validSet[,-target],
@@ -34,7 +34,7 @@ model <- mlp(x= trainSet[,-target],
 #GRAFICO DE LA EVOLUCION DEL ERROR 
 plotIterativeError(model)
 
-#FUNCION que calcula el error cuadrático medio MSE
+#FUNCION que calcula el error cuadr?tico medio MSE
 MSE <- function(pred,obs) sum((pred - obs)^2) / length(obs)
 
 #VECTOR DE LOS ERRORES
