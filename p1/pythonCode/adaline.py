@@ -29,21 +29,36 @@ import sys
 # mathematical module so we can use random numbers
 import numpy as np
 # check if the input is right
-if len(sys.argv) < 3:
-	print(colors.FAIL + "Error: the program has less than 2 arguments." + colors.ENDC)
-	print(colors.WARNING  + "Usage: python adaline.py <file> <number of inputs/weights>" + colors.ENDC)
+if len(sys.argv) < 6:
+	print(colors.FAIL + "Error: the program has less than 6 arguments." + colors.ENDC)
+	print(colors.WARNING  + "Usage: python adaline.py <training-file> <validation-file> <test-file> <number of inputs/weights> <number of cycles>" + colors.ENDC)
 	sys.exit(2)
-
-if ".csv" not in str(sys.argv[1]):
+if len(sys.argv) > 6:
+	print(colors.FAIL + "Error: the program has more than 6 arguments." + colors.ENDC)
+	print(colors.WARNING  + "Usage: python adaline.py <training-file> <validation-file> <test-file> <number of inputs/weights> <number of cycles>" + colors.ENDC)
+	sys.exit(2)
+for x in xrange(2,4):
+	if ".csv" not in str(sys.argv[x]):
+		print(colors.FAIL  + "Error: that's not a csv file.")
+		print(colors.WARNING  + "File entered: "+ str(sys.argv[x])  + colors.ENDC)
+		sys.exit(2)
+''' old error reporting
+if ".csv" not in str(sys.argv[1]) and :
 	print(colors.FAIL  + "Error: that's not a csv file.")
 	print(colors.WARNING  + "File entered: "+ str(sys.argv[1])  + colors.ENDC)
 	sys.exit(2)
+end of old error reporting
+'''
 print(colors.OKBLUE+"File: " + str(sys.argv[1])+colors.ENDC)
 # Read the CSV into a panda's data frame (df)
-dataFrame = pd.read_csv(str(sys.argv[1]), delimiter=',')
+dataFrameTraining = pd.read_csv(str(sys.argv[1]), delimiter=',')
+dataFrameValidation = pd.read_csv(str(sys.argv[2]), delimiter=',')
+dataFrameTests = pd.read_csv(str(sys.argv[3]), delimiter=',')
 
 # Export it as a list of tuples
-data = [np.matrix(x) for x in dataFrame.values]
+dataTraining = [np.matrix(x) for x in dataFrameTraining.values]
+dataValidation = [np.matrix(x) for x in dataFrameValidation.values]
+dataTests = [np.matrix(x) for x in dataFrameTests.values]
 
 # ADALINE MODUS OPERANDI
 '''
@@ -108,7 +123,7 @@ def calculateError(rows, weights, threshold):
 	for x in rows:
 		output = calculateOutputPerRow(x[0:8], weights, threshold)
 		error = error + (x[8] - output)**2 # test this line
-	error = error * 1/2 * 1/len(rows)
+	error = error * 1/len(rows)
 	return error
 '''
 	Name: modifyWeights
@@ -136,6 +151,21 @@ def training(rows, weights, threshold, learnfactor):
 		output = calculateOutputPerRow(x[0:8], weights, threshold)
 		weights, threshold = modifyWeights(output, x, weights, threshold, learnfactor)
 	return weights, threshold
+'''
+	Name: cycle
+	Function: executes 'n' times training, calcerror, validation (which is
+			calcerror with validation rows), calcerror
+	Input: rows, weights, threshold, learnfactor, rows_validation, nCycles
+	Returns: weights, threshold after the training
+'''
+def Cycle(rows, rows_validation, weights, threshold, learnfactor, nCycles):
+	errorCalculatedTraining = []
+	errorCalculatedValidated = []
+	for x in nCycles:
+		weights, threshold = training(rows, weights, threshold, learnfactor)
+		errorCalculatedTraining.append(calculateError(rows, weights, threshold))
+		errorCalculatedValidated.append(calculateError(rows_validation, weights, threshold))		
+	return weights, threshold, errorCalculatedTraining, errorCalculatedValidated
 ################################################################################################################
 ################################################################################################################
 # HERE'S WHERE THE MAGIC HAPPENS
@@ -150,16 +180,26 @@ output = [] # output list with calculated values
 desiredOutput = [] # desired output list
 threshold = 0.0
 # and then initialize the weights list with the number of inputs
-for x in xrange(0, int(sys.argv[2])):
+for x in xrange(0, int(sys.argv[4])):
 	weights.append(0.0)
 # Initialize weights and thresholds with random float numbers between -1 and 1
 weights, threshold = initializeWT(weights, threshold)
-rows = getRows(dataFrame)
+rows = getRows(dataFrameTraining)
+rows_validation = getRows(dataFrameValidation)
+rows_tests = getRows(dataFrameTests)
 # calculates error
 #accumulatedError = calculateError(rows, weights, threshold)
 #print(accumulatedError)
-
+'''
 print("\n")
+weights, threshold = training(rows, weights, threshold, learnfactor)
 print(colors.OKGREEN+"first weights calc: " + colors.OKBLUE+ str(weights) + ", threshold: " + str(threshold)+ colors.ENDC)
 weights, threshold = training(rows, weights, threshold, learnfactor)
 print(colors.OKGREEN+"weights after training: "+ colors.OKBLUE+ str(weights) + ", threshold: " + str(threshold)+ colors.ENDC)
+'''
+errorTraining = []
+errorValidated = []
+print(colors.WARNING + "TESTING CYCLE" + colors.ENDC)
+weights, threshold, errorTraining, errorValidated = Cycle(rows, rows_validation, weights, threshold, learnfactor, sys.argv[5])
+print(colors.OKBLUE + "TESTING CYCLE FINISHED" + colors.ENDC)
+print(colors.OKGREEN+"weights calculated: " + colors.OKBLUE+ str(weights) + colors.OKGREEN + "\nthreshold: " + colors.OKBLUE+ str(threshold)+ colors.ENDC)
