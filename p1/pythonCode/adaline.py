@@ -10,7 +10,16 @@
 ################################################################################################################
 ################################################################################################################
 
-
+'''
+	Name: colors
+	Function: contains a set of strings to change the terminal color
+'''
+class colors:
+	WARNING = "\033[93m"
+	OKBLUE = '\033[94m'
+	OKGREEN = '\033[92m'
+	FAIL = "\033[91m"
+	ENDC = "\033[0m"
 
 # library so we can read a csv 
 # Installation: sudo pip install pandas
@@ -21,15 +30,15 @@ import sys
 import numpy as np
 # check if the input is right
 if len(sys.argv) < 3:
-	print("Error: the program has less than 2 arguments.")
-	print("Usage: python adaline.py <file> <number of inputs/weights>")
+	print(colors.FAIL + "Error: the program has less than 2 arguments." + colors.ENDC)
+	print(colors.WARNING  + "Usage: python adaline.py <file> <number of inputs/weights>" + colors.ENDC)
 	sys.exit(2)
 
 if ".csv" not in str(sys.argv[1]):
-	print("Error: that's not a csv file.")
-	print("File entered: "+ str(sys.argv[1]))
+	print(colors.FAIL  + "Error: that's not a csv file.")
+	print(colors.WARNING  + "File entered: "+ str(sys.argv[1])  + colors.ENDC)
 	sys.exit(2)
-print("File: " + str(sys.argv[1]))
+print(colors.OKBLUE+"File: " + str(sys.argv[1])+colors.ENDC)
 # Read the CSV into a panda's data frame (df)
 dataFrame = pd.read_csv(str(sys.argv[1]), delimiter=',')
 
@@ -116,6 +125,17 @@ def modifyWeights(output, row, weights,  threshold, learnfactor):
 		weights[x] = weights[x] + weightsTemp
 	threshold = threshold + learnedDiff
 	return weights, threshold
+'''
+	Name: training
+	Function: makes one cylce of training (from 3 to 5)
+	Input: rows, weights, threshold, learnfactor 
+	Returns: weights, threshold after the training
+'''
+def training(rows, weights, threshold, learnfactor):
+	for x in rows:
+		output = calculateOutputPerRow(x[0:8], weights, threshold)
+		weights, threshold = modifyWeights(output, x, weights, threshold, learnfactor)
+	return weights, threshold
 ################################################################################################################
 ################################################################################################################
 # HERE'S WHERE THE MAGIC HAPPENS
@@ -132,20 +152,14 @@ threshold = 0.0
 # and then initialize the weights list with the number of inputs
 for x in xrange(0, int(sys.argv[2])):
 	weights.append(0.0)
-
-inputs = []
-
 # Initialize weights and thresholds with random float numbers between -1 and 1
 weights, threshold = initializeWT(weights, threshold)
 rows = getRows(dataFrame)
 # calculates error
-accumulatedError = calculateError(rows, weights, threshold)
-print(accumulatedError)
+#accumulatedError = calculateError(rows, weights, threshold)
+#print(accumulatedError)
 
-output = calculateOutputPerRow(rows[0][0:8], weights, threshold)
-weights, threshold = modifyWeights(output, rows[0], weights, threshold, learnfactor)
-print("first weights calc: "+ str(weights))
-
-output = calculateOutputPerRow(rows[0][0:8], weights, threshold)
-weights, threshold = modifyWeights(output, rows[0], weights, threshold, learnfactor)
-print("second weights calc: "+ str(weights))
+print("\n")
+print(colors.OKGREEN+"first weights calc: " + colors.OKBLUE+ str(weights) + ", threshold: " + str(threshold)+ colors.ENDC)
+weights, threshold = training(rows, weights, threshold, learnfactor)
+print(colors.OKGREEN+"weights after training: "+ colors.OKBLUE+ str(weights) + ", threshold: " + str(threshold)+ colors.ENDC)
