@@ -1,4 +1,5 @@
-	# Author: Jorge Hevia Moreno
+# Author: Jorge Hevia Moreno
+# Co-Author: Luis Victor Hevia
 # Contact: jmhev@outlook.com
 # File: this file provides the functions needed to import
 #		data from a csv file and use it
