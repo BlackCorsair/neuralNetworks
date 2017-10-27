@@ -178,7 +178,7 @@ def Cycle(rows, rows_validation, weights, threshold, learnfactor, nCycles):
 ################################################################################################################
 
 # learn factor
-learnfactor = 0.1
+learnfactor = 0.0001
 # first we create a lists of weights, outputs and desiredOutputs, then the treshold variable
 weights = []
 output = [] # output list with calculated values
@@ -204,23 +204,15 @@ print(colors.OKGREEN+"weights after training: "+ colors.OKBLUE+ str(weights) + "
 '''
 errorTraining = []
 errorValidated = []
-print(colors.WARNING + "TESTING CYCLE" + colors.ENDC)
 weights, threshold, errorTraining, errorValidated = Cycle(rows, rows_validation, weights, threshold, learnfactor, int(sys.argv[5]))
 print(colors.OKBLUE + "TESTING CYCLE FINISHED" + colors.ENDC)
-print(colors.OKGREEN+"weights calculated: " + colors.OKBLUE+ str(weights) + colors.OKGREEN + "\nthreshold: " + colors.OKBLUE+ str(threshold)+ colors.ENDC)
 
 
 # printing
 baseOutput = []
 baseOutputVal = []
-for x in rows:
-	baseOutput.append(x[8])
-for x in rows_validation:
-	baseOutputVal.append(x[8])
-print(len(baseOutput))
-print(len(baseOutputVal))
-print(len(errorTraining))
-print(len(errorValidated))
-plt.plot(errorTraining, baseOutput[0:len(errorTraining)], 'r', errorValidated, baseOutputVal[0:len(errorTraining)], 'b')
 
+#plt.xlim([0,1000])
+plt.plot(errorTraining, 'b', errorValidated, 'r')
 plt.show()
+#pls.close()
