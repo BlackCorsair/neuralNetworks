@@ -15,9 +15,9 @@ testSet  <- read.csv("RandomizedDataTest.csv",dec=".",sep=",",header = F)
 target <- ncol(trainSet)
 
 #SELECCION DE LOS PARAMETROS DE LA RED
-topologia        <- c(50)   #una capa oculta de 50 neuronas. M?s capas ej: c(20,10) 
-razonAprendizaje <- 0.2
-ciclosMaximos    <- 1000
+topologia <- c(6)
+razonAprendizaje<-0.01
+ciclosMaximos   <- 10000
 
 #EJECUCION DEL APRENDIZAJE Y GENERACION DEL MODELO
 # en Rsnns se llama test a nuestro fichero de validaci?n
@@ -61,8 +61,8 @@ write.csv(outputs$valid,"validOutputs.csv")
 write.csv(outputs$test,"testOutputs.csv")
 
 # #plot de la salida de test
-# x=1:nrow(testSet)
-# plot(x,outputs$test,type="b",col="red",main="pred (red) vs obs (blue)")
-# lines(x,testSet[,target],type="b",col="blue")
+ # x=1:nrow(testSet)
+ # plot(x,outputs$test,type="b",col="red",main="pred (red) vs obs (blue)")
+ # lines(x,testSet[,target],type="b",col="blue")
 
 
