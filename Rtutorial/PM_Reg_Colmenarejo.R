@@ -15,7 +15,7 @@ testSet  <- read.csv("RandomizedDataTest.csv",dec=".",sep=",",header = F)
 target <- ncol(trainSet)
 
 #SELECCION DE LOS PARAMETROS DE LA RED
-topologia <- c(6)
+topologia <- c(128)
 razonAprendizaje<-0.01
 ciclosMaximos   <- 10000
 
