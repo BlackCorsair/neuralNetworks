@@ -1,4 +1,5 @@
-	# Author: Jorge Hevia Moreno
+import adaline as ad	
+# Author: Jorge Hevia Moreno
 # Contact: jmhev@outlook.com
 # File: this file provides the functions needed to import
 #		data from a csv file and use it
@@ -78,107 +79,6 @@ dataTests = [np.matrix(x) for x in dataFrameTests.values]
 
 ################################################################################################################
 ################################################################################################################
-# FUNCTION DEFINITIONS
-################################################################################################################
-################################################################################################################
-
-
-'''
-	Name: initializerWT
-	Function: it initializes with random values between -1.0 and 1.0 the weights and threshold given
-	Input: weights list and threshold value
-	Returns: weights tuple and threshold value (in that order)
-	TO-DO: use a heavier random generator
-'''
-def initializeWT(weights, threshold):
-	for x in xrange(0, len(weights)):
-		weights[x] = np.random.uniform(low=0.1, high=(1))
-		print("Weight "+str(x) + " with initial random value: " +str(weights[x]))
-	threshold = np.random.uniform(low=-1, high=(1))
-	print("Threshold initial random value is: "+str(threshold))
-	return weights, threshold
-def getRows(data):
-	# create a list of numpy arrays
-	# every np.array will contain a row
-	rows = []
-	for x in data.values:
-		rows.append(np.array(x))
-	return rows
-	#end
-
-'''
-	Name: calculateOutputPerRow
-	Function: it calculates the output given the inputs from the 
-				csv file and some random weights
-	Input: row array, weights and threshold
-	Returns: the outputs (y) np.array
-'''
-def calculateOutputPerRow(row, weights, threshold):
-	return row.dot(np.array(weights)) + threshold
-
-'''
-	Name: calculateError
-	Function: it calculates the total error given the inputs from the 
-				csv file and some random weights
-	Input: rows list, weights and threshold
-	Returns: the outputs (y) np.array
-'''
-def calculateError(rows, weights, threshold):
-	error = 0.0
-	for x in rows:
-		output = calculateOutputPerRow(x[0:8], weights, threshold)
-		error = error + (x[8] - output)**2 # test this line
-	error = error * 1/len(rows)
-	return error
-'''
-	Name: modifyWeights
-	Function: modifies the weights and threshold given the output
-				calculated from the row (also given)
-	Input: output calculated from row, row, weights vector, threhold, learnfactor
-	Returns: modified weights vector and threshold
-'''
-def modifyWeights(output, row, weights,  threshold, learnfactor):
-	weightsTemp = 0.0
-	learnedDiff = learnfactor * (row[8] - output)
-	for x in xrange(0, len(weights)):
-		weightsTemp = learnedDiff * row[x] # learnedDiff is calculated outside the loop for better performance
-		weights[x] = weights[x] + weightsTemp
-	threshold = threshold + learnedDiff
-	return weights, threshold
-'''
-	Name: training
-	Function: makes one cylce of training (from 3 to 5)
-	Input: rows, weights, threshold, learnfactor 
-	Returns: weights, threshold after the training
-'''
-def training(rows, weights, threshold, learnfactor):
-	for x in rows:
-		output = calculateOutputPerRow(x[0:8], weights, threshold)
-		weights, threshold = modifyWeights(output, x, weights, threshold, learnfactor)
-	return weights, threshold
-'''
-	Name: cycle
-	Function: executes 'n' times training, calcerror, validation (which is
-			calcerror with validation rows), calcerror
-	Input: rows, weights, threshold, learnfactor, rows_validation, nCycles
-	Returns: weights, threshold after the training
-'''
-def Cycle(rows, rows_validation, weights, threshold, learnfactor, nCycles):
-	errorCalculatedTraining = []
-	errorCalculatedValidated = []
-	for x in xrange(0, nCycles):
-		weights, threshold = training(rows, weights, threshold, learnfactor)
-		errorCalculatedTraining.append(calculateError(rows, weights, threshold))
-		errorCalculatedValidated.append(calculateError(rows_validation, weights, threshold))		
-	return weights, threshold, errorCalculatedTraining, errorCalculatedValidated
-'''
-	Name: Predict
-	Function: calculates the output from the testing rows and then saves it in an array
-	Input: row, weights, threshold
-	Returns: weights, threshold after the training
-'''
-################################################################################################################
-################################################################################################################
 # HERE'S WHERE THE MAGIC HAPPENS
 ################################################################################################################
 ################################################################################################################
@@ -194,10 +94,10 @@ threshold = 0.0
 for x in xrange(0, int(sys.argv[4])):
 	weights.append(0.0)
 # Initialize weights and thresholds with random float numbers between -1 and 1
-weights, threshold = initializeWT(weights, threshold)
-rows = getRows(dataFrameTraining)
-rows_validation = getRows(dataFrameValidation)
-rows_tests = getRows(dataFrameTests)
+weights, threshold = ad.initializeWT(weights, threshold)
+rows = ad.getRows(dataFrameTraining)
+rows_validation = ad.getRows(dataFrameValidation)
+rows_tests = ad.getRows(dataFrameTests)
 # calculates error
 #accumulatedError = calculateError(rows, weights, threshold)
 #print(accumulatedError)
@@ -210,7 +110,7 @@ print(colors.OKGREEN+"weights after training: "+ colors.OKBLUE+ str(weights) + "
 '''
 errorTraining = []
 errorValidated = []
-weights, threshold, errorTraining, errorValidated = Cycle(rows, rows_validation, weights, threshold, learnfactor, int(sys.argv[5]))
+weights, threshold, errorTraining, errorValidated = ad.Cycle(rows, rows_validation, weights, threshold, learnfactor, int(sys.argv[5]))
 print(colors.OKBLUE + "TESTING CYCLE FINISHED" + colors.ENDC)
 
 
