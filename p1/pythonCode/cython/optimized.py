@@ -120,5 +120,5 @@ baseOutputVal = []
 
 #plt.xlim([0,1000])
 plt.plot(errorTraining, 'b', errorValidated, 'r')
-plt.show()
+#plt.show()
 #pls.close()
