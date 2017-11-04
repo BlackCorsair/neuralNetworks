@@ -243,9 +243,10 @@ plt.plot(errorTraining, c='b', label="Training error")
 plt.plot(errorValidated, c='r', label="Validation error")
 plt.legend()
 # WRITING FILES
-outputs = 'outputs-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
-outputs = 'weights-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
+outputsTxt = 'outputs-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
+weightsTxt = 'weights-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
 plot = 'plot-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.png'
-np.savetxt(outputs, np.array(predictedOutput), delimiter=",")
-np.savetxt(outputs, np.array(weights), delimiter=",")
+np.savetxt(outputsTxt, np.array(predictedOutput), delimiter=",")
+np.savetxt(weightsTxt, np.array(weights), delimiter=",")
 plt.savefig(plot, dpi=500)
+print("Writing files:\n- "+outputsTxt+"\n- "+weightsTxt+"\n- "+plot)
