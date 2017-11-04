@@ -193,7 +193,7 @@ def Predict(rows, weights, threshold):
 ################################################################################################################
 print(colors.OKBLUE+"Initializing values..." +colors.ENDC)
 # learn factor
-learnfactor = 0.0001
+learnfactor = 0.01
 # first we create a lists of weights, outputs and desiredOutputs, then the treshold variable
 weights = []
 output = [] # output list with calculated values
@@ -245,6 +245,8 @@ plt.legend()
 # WRITING FILES
 outputsTxt = 'outputs-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
 weightsTxt = 'weights-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
+weights.append(12000021)
+weights.append(threshold)
 plot = 'plot-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.png'
 np.savetxt(outputsTxt, np.array(predictedOutput), delimiter=",")
 np.savetxt(weightsTxt, np.array(weights), delimiter=",")
