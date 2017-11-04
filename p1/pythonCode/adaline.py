@@ -34,13 +34,13 @@ import sys
 # mathematical module so we can use random numbers
 import numpy as np
 # check if the input is right
-if len(sys.argv) < 6:
+if len(sys.argv) < 7:
 	print(colors.FAIL + "Error: the program has less than 6 arguments." + colors.ENDC)
-	print(colors.WARNING  + "Usage: python adaline.py <training-file> <validation-file> <test-file> <number of inputs/weights> <number of cycles>" + colors.ENDC)
+	print(colors.WARNING  + "Usage: python adaline.py <training-file> <validation-file> <test-file> <number of inputs/weights> <number of cycles> <learnfactor>" + colors.ENDC)
 	sys.exit(2)
-if len(sys.argv) > 6:
+if len(sys.argv) > 7:
 	print(colors.FAIL + "Error: the program has more than 6 arguments." + colors.ENDC)
-	print(colors.WARNING  + "Usage: python adaline.py <training-file> <validation-file> <test-file> <number of inputs/weights> <number of cycles>" + colors.ENDC)
+	print(colors.WARNING  + "Usage: python adaline.py <training-file> <validation-file> <test-file> <number of inputs/weights> <number of cycles> <learnfactor>" + colors.ENDC)
 	sys.exit(2)
 for x in xrange(2,4):
 	if ".csv" not in str(sys.argv[x]):
@@ -193,7 +193,7 @@ def Predict(rows, weights, threshold):
 ################################################################################################################
 print(colors.OKBLUE+"Initializing values..." +colors.ENDC)
 # learn factor
-learnfactor = 0.01
+learnfactor = float(sys.argv[6])
 # first we create a lists of weights, outputs and desiredOutputs, then the treshold variable
 weights = []
 output = [] # output list with calculated values
@@ -251,4 +251,4 @@ plot = 'plot-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.png'
 np.savetxt(outputsTxt, np.array(predictedOutput), delimiter=",")
 np.savetxt(weightsTxt, np.array(weights), delimiter=",")
 plt.savefig(plot, dpi=500)
-print("Writing files:\n- "+outputsTxt+"\n- "+weightsTxt+"\n- "+plot)
+print(colors.OKGREEN +"Writing files:\n- "+outputsTxt+"\n- "+weightsTxt+"\n- "+plot + colors.ENDC)
