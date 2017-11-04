@@ -16,7 +16,7 @@ target <- ncol(trainSet)
 
 #SELECCION DE LOS PARAMETROS DE LA RED
 topologia <- c(128)
-razonAprendizaje<-0.01
+razonAprendizaje<-0.1
 ciclosMaximos   <- 10000
 
 #EJECUCION DEL APRENDIZAJE Y GENERACION DEL MODELO
@@ -61,8 +61,8 @@ write.csv(outputs$valid,"validOutputs.csv")
 write.csv(outputs$test,"testOutputs.csv")
 
 # #plot de la salida de test
- # x=1:nrow(testSet)
- # plot(x,outputs$test,type="b",col="red",main="pred (red) vs obs (blue)")
- # lines(x,testSet[,target],type="b",col="blue")
+ x=1:nrow(testSet)
+ plot(x,outputs$test,type="b",col="red",main="pred (red) vs obs (blue)")
+ lines(x,testSet[,target],type="b",col="blue")
 
 
