@@ -125,8 +125,8 @@ def calculateOutputPerRow(row, weights, threshold):
 def calculateError(rows, weights, threshold):
 	error = 0.0
 	for x in rows:
-		output = calculateOutputPerRow(x[0:8], weights, threshold)
-		error = error + (x[8] - output)**2 # test this line
+		output = calculateOutputPerRow(x[0:len(weights)], weights, threshold)
+		error = error + (x[len(weights)] - output)**2 # test this line
 	error = error * 1/len(rows)
 	return error
 '''
@@ -138,7 +138,7 @@ def calculateError(rows, weights, threshold):
 '''
 def modifyWeights(output, row, weights,  threshold, learnfactor):
 	weightsTemp = 0.0
-	learnedDiff = learnfactor * (row[8] - output)
+	learnedDiff = learnfactor * (row[len(weights)] - output)
 	for x in xrange(0, len(weights)):
 		weightsTemp = learnedDiff * row[x] # learnedDiff is calculated outside the loop for better performance
 		weights[x] = weights[x] + weightsTemp
@@ -152,7 +152,7 @@ def modifyWeights(output, row, weights,  threshold, learnfactor):
 '''
 def training(rows, weights, threshold, learnfactor):
 	for x in rows:
-		output = calculateOutputPerRow(x[0:8], weights, threshold)
+		output = calculateOutputPerRow(x[0:len(weights)], weights, threshold)
 		weights, threshold = modifyWeights(output, x, weights, threshold, learnfactor)
 	return weights, threshold
 '''
@@ -178,10 +178,10 @@ def Cycle(rows, rows_validation, weights, threshold, learnfactor, nCycles):
 '''
 def Predict(rows, weights, threshold):
 	predictedOutput = []
-	maxData = max(rows[:,8])
-	minData = min(rows[:,8])
+	maxData = max(rows[:,len(weights)])
+	minData = min(rows[:,len(weights)])
 	for row in rows:
-		normData = calculateOutputPerRow(row[0:8], weights, threshold)
+		normData = calculateOutputPerRow(row[0:len(weights)], weights, threshold)
 		origData = normData * (maxData - minData) - minData
 		predictedOutput.append([origData, normData])
 	return predictedOutput
