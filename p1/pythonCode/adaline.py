@@ -21,6 +21,11 @@ class colors:
 	FAIL = "\033[91m"
 	ENDC = "\033[0m"
 
+# libraries to visualize dataTraining
+import matplotlib.pyplot as plt
+import matplotlib
+import csv
+matplotlib.style.use('ggplot')
 # library so we can read a csv 
 # Installation: sudo pip install pandas
 import pandas as pd
@@ -49,12 +54,13 @@ if ".csv" not in str(sys.argv[1]) and :
 	sys.exit(2)
 end of old error reporting
 '''
-print(colors.OKBLUE+"File: " + str(sys.argv[1])+colors.ENDC)
+print(colors.OKBLUE+"Reading files: " + str(sys.argv[1]) + str(sys.argv[2]) + str(sys.argv[3]) + "..." +colors.ENDC)
 # Read the CSV into a panda's data frame (df)
 dataFrameTraining = pd.read_csv(str(sys.argv[1]), delimiter=',')
 dataFrameValidation = pd.read_csv(str(sys.argv[2]), delimiter=',')
 dataFrameTests = pd.read_csv(str(sys.argv[3]), delimiter=',')
 
+print(colors.OKBLUE+"Exporting files into readable values..." +colors.ENDC)
 # Export it as a list of tuples
 dataTraining = [np.matrix(x) for x in dataFrameTraining.values]
 dataValidation = [np.matrix(x) for x in dataFrameValidation.values]
@@ -88,9 +94,7 @@ dataTests = [np.matrix(x) for x in dataFrameTests.values]
 def initializeWT(weights, threshold):
 	for x in xrange(0, len(weights)):
 		weights[x] = np.random.uniform(low=0.1, high=(1))
-		print("Weight "+str(x) + " with initial random value: " +str(weights[x]))
 	threshold = np.random.uniform(low=-1, high=(1))
-	print("Threshold initial random value is: "+str(threshold))
 	return weights, threshold
 def getRows(data):
 	# create a list of numpy arrays
@@ -161,19 +165,35 @@ def training(rows, weights, threshold, learnfactor):
 def Cycle(rows, rows_validation, weights, threshold, learnfactor, nCycles):
 	errorCalculatedTraining = []
 	errorCalculatedValidated = []
-	for x in nCycles:
+	for x in xrange(0, nCycles):
 		weights, threshold = training(rows, weights, threshold, learnfactor)
 		errorCalculatedTraining.append(calculateError(rows, weights, threshold))
 		errorCalculatedValidated.append(calculateError(rows_validation, weights, threshold))		
 	return weights, threshold, errorCalculatedTraining, errorCalculatedValidated
+'''
+	Name: Predict
+	Function: calculates the output from the testing rows and then saves it in an array
+	Input: row, weights, threshold
+	Returns: an array of outputs
+'''
+def Predict(rows, weights, threshold):
+	predictedOutput = []
+	maxData = max(rows[:,8])
+	minData = min(rows[:,8])
+	for row in rows:
+		normData = calculateOutputPerRow(row[0:8], weights, threshold)
+		origData = normData * (maxData - minData) - minData
+		predictedOutput.append([origData, normData])
+	return predictedOutput
+
 ################################################################################################################
 ################################################################################################################
 # HERE'S WHERE THE MAGIC HAPPENS
 ################################################################################################################
 ################################################################################################################
-
+print(colors.OKBLUE+"Initializing values..." +colors.ENDC)
 # learn factor
-learnfactor = 0.1
+learnfactor = 0.0001
 # first we create a lists of weights, outputs and desiredOutputs, then the treshold variable
 weights = []
 output = [] # output list with calculated values
@@ -182,11 +202,13 @@ threshold = 0.0
 # and then initialize the weights list with the number of inputs
 for x in xrange(0, int(sys.argv[4])):
 	weights.append(0.0)
+
+print(colors.OKBLUE+"Generating values to analyze..." +colors.ENDC)
 # Initialize weights and thresholds with random float numbers between -1 and 1
 weights, threshold = initializeWT(weights, threshold)
 rows = getRows(dataFrameTraining)
 rows_validation = getRows(dataFrameValidation)
-rows_tests = getRows(dataFrameTests)
+rows_tests = np.array(dataFrameTests)
 # calculates error
 #accumulatedError = calculateError(rows, weights, threshold)
 #print(accumulatedError)
@@ -197,9 +219,33 @@ print(colors.OKGREEN+"first weights calc: " + colors.OKBLUE+ str(weights) + ", t
 weights, threshold = training(rows, weights, threshold, learnfactor)
 print(colors.OKGREEN+"weights after training: "+ colors.OKBLUE+ str(weights) + ", threshold: " + str(threshold)+ colors.ENDC)
 '''
+print(colors.OKBLUE+"Training..." +colors.ENDC)
+
 errorTraining = []
 errorValidated = []
-print(colors.WARNING + "TESTING CYCLE" + colors.ENDC)
-weights, threshold, errorTraining, errorValidated = Cycle(rows, rows_validation, weights, threshold, learnfactor, sys.argv[5])
+weights, threshold, errorTraining, errorValidated = Cycle(rows, rows_validation, weights, threshold, learnfactor, int(sys.argv[5]))
 print(colors.OKBLUE + "TESTING CYCLE FINISHED" + colors.ENDC)
-print(colors.OKGREEN+"weights calculated: " + colors.OKBLUE+ str(weights) + colors.OKGREEN + "\nthreshold: " + colors.OKBLUE+ str(threshold)+ colors.ENDC)
+print(colors.OKBLUE+"Training done." +colors.ENDC)
+
+print(colors.OKBLUE+"Forecasting testing output..." +colors.ENDC)
+predictedOutput = Predict(rows_tests, weights, threshold)
+print(colors.OKBLUE+"Predicted output saved." +colors.ENDC)
+
+# printing
+baseOutput = []
+baseOutputVal = []
+
+#plt.xlim([0,1000])
+plt.xlabel('Iterations from 0 to '+ sys.argv[5])
+plt.ylabel('Error across the Iterations')
+#plt.plot(errorTraining, 'b', c='b', label="Training error", errorValidated, 'r', c='r', label="Validation error")
+plt.plot(errorTraining, c='b', label="Training error")
+plt.plot(errorValidated, c='r', label="Validation error")
+plt.legend()
+# WRITING FILES
+outputs = 'outputs-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
+outputs = 'weights-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
+plot = 'plot-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.png'
+np.savetxt(outputs, np.array(predictedOutput), delimiter=",")
+np.savetxt(outputs, np.array(weights), delimiter=",")
+plt.savefig(plot, dpi=500)
