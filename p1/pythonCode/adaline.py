@@ -48,10 +48,6 @@ for x in xrange(2,4):
 		print(colors.WARNING  + "File entered: "+ str(sys.argv[x])  + colors.ENDC)
 		sys.exit(2)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 2a659e5cd795e5270cef45bfe73785738b9381b9
 print(colors.OKBLUE+"Reading files: " + str(sys.argv[1]) + str(sys.argv[2]) + str(sys.argv[3]) + "..." +colors.ENDC)
 # Read the CSV into a panda's data frame (df)
 dataFrameTraining = pd.read_csv(str(sys.argv[1]), delimiter=',')
@@ -229,9 +225,17 @@ plt.legend()
 # WRITING FILES
 outputsTxt = 'outputs-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
 weightsTxt = 'weights-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
+errorsTxt = 'errors-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
 weights.append(threshold)
 plot = 'plot-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.png'
 np.savetxt(outputsTxt, np.array(predictedOutput), delimiter=",")
+
+errorstxtout = []
+errorstxtout.append(["validation", errorValidated[-1]])
+errorstxtout.append(["training", errorTraining[-1]])
+
+np.savetxt(errorsTxt, errorstxtout, delimiter=",")
+
 np.savetxt(weightsTxt, np.array(weights), delimiter=",")
 plt.savefig(plot, dpi=500)
 print(colors.OKGREEN +"Writing files:\n- "+outputsTxt+"\n- "+weightsTxt+"\n- "+plot + colors.ENDC)
