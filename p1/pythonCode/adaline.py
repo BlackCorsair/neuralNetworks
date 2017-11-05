@@ -48,7 +48,10 @@ for x in xrange(2,4):
 		print(colors.WARNING  + "File entered: "+ str(sys.argv[x])  + colors.ENDC)
 		sys.exit(2)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2a659e5cd795e5270cef45bfe73785738b9381b9
 print(colors.OKBLUE+"Reading files: " + str(sys.argv[1]) + str(sys.argv[2]) + str(sys.argv[3]) + "..." +colors.ENDC)
 # Read the CSV into a panda's data frame (df)
 dataFrameTraining = pd.read_csv(str(sys.argv[1]), delimiter=',')
@@ -217,13 +220,12 @@ print(colors.OKBLUE+"Predicted output saved." +colors.ENDC)
 baseOutput = []
 baseOutputVal = []
 
-#plt.xlim([0,1000])
 plt.xlabel('Iterations from 0 to '+ sys.argv[5])
 plt.ylabel('Error across the Iterations')
-#plt.plot(errorTraining, 'b', c='b', label="Training error", errorValidated, 'r', c='r', label="Validation error")
 plt.plot(errorTraining, c='b', label="Training error")
 plt.plot(errorValidated, c='r', label="Validation error")
 plt.legend()
+
 # WRITING FILES
 outputsTxt = 'outputs-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
 weightsTxt = 'weights-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
