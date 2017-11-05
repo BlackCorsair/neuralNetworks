@@ -225,9 +225,17 @@ plt.legend()
 # WRITING FILES
 outputsTxt = 'outputs-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
 weightsTxt = 'weights-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
+errorsTxt = 'errors-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.csv'
 weights.append(threshold)
 plot = 'plot-nIterations-'+sys.argv[5]+'-learnfactor-'+str(learnfactor)+'.png'
 np.savetxt(outputsTxt, np.array(predictedOutput), delimiter=",")
+
+errorstxtout = []
+errorstxtout.append(errorValidated[-1])
+errorstxtout.append(errorTraining[-1])
+
+np.savetxt(errorsTxt, np.array(errorstxtout), delimiter=",")
+
 np.savetxt(weightsTxt, np.array(weights), delimiter=",")
 plt.savefig(plot, dpi=500)
-print(colors.OKGREEN +"Writing files:\n- "+outputsTxt+"\n- "+weightsTxt+"\n- "+plot + colors.ENDC)
+print(colors.OKGREEN +"Writing files:\n- "+outputsTxt+"\n- "+weightsTxt+"\n- "+errorsTxt+"\n- "+plot + colors.ENDC)
