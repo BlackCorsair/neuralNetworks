@@ -10,8 +10,8 @@ set.seed(1)
 
 fold <- 1
 # formato csv. Campos separados por comas y n?meros con . como separador decimal
-trainSet <- read.csv(paste("Train",fold,".csv",sep=""),dec=".",sep=" ",header = F)
-testSet  <- read.csv(paste("Test", fold,".csv",sep=""),dec=".",sep=" ",header = F)
+trainSet <- read.csv(paste("train",fold,".csv",sep=""),dec=".",sep=" ",header = F)
+testSet  <- read.csv(paste("test", fold,".csv",sep=""),dec=".",sep=" ",header = F)
 
 #SELECCION DE LA SALIDA. Num de columna del target
 nTarget <- ncol(trainSet)
