@@ -5,13 +5,13 @@ set.seed(1)
 
 
 #CARGA DE LOS DATOS
-# los ficheros se deberían llamar Train1.csv, Test1.csv, Train2.csv, Test2.csv, Train3.csv, Test3.csv
+# los ficheros se deber?an llamar Train1.csv, Test1.csv, Train2.csv, Test2.csv, Train3.csv, Test3.csv
 # se asigna a fold 1, 2 o 3
 
 fold <- 1
-# formato csv. Campos separados por comas y números con . como separador decimal
-trainSet <- read.csv(paste("Train",fold,".csv",sep=""),dec=".",sep=",",header = F)
-testSet  <- read.csv(paste("Test", fold,".csv",sep=""),dec=".",sep=",",header = F)
+# formato csv. Campos separados por comas y n?meros con . como separador decimal
+trainSet <- read.csv(paste("Train",fold,".csv",sep=""),dec=".",sep=" ",header = F)
+testSet  <- read.csv(paste("Test", fold,".csv",sep=""),dec=".",sep=" ",header = F)
 
 #SELECCION DE LA SALIDA. Num de columna del target
 nTarget <- ncol(trainSet)
@@ -33,7 +33,7 @@ testInput  <- as.matrix(testInput )
 topologia        <- c(10)
 razonAprendizaje <- 0.05
 ciclosMaximos    <- 5000
-## asignar nombre de fichero según los parámetros
+## asignar nombre de fichero seg?n los par?metros
 fileID <- paste("fX",fold,"_topX",paste(topologia,collapse="-"),"_ra",razonAprendizaje,"_CMX",ciclosMaximos,".csv",sep="")
 
 
@@ -65,7 +65,7 @@ testCm  <- confusionMatrix(testTarget,testPred)
 trainCm
 testCm
 
-#PORCENTAJE TOTAL DE ACIERTOS a partir de la matriz de confusión
+#PORCENTAJE TOTAL DE ACIERTOS a partir de la matriz de confusi?n
 accuracy <- function (cm) sum(diag(cm))/sum(cm)
 accuracies <- c(TrainAccuracy= accuracy(trainCm), TestAccuracy=  accuracy(testCm) )
 accuracies
@@ -97,7 +97,7 @@ write.csv(iterativeErrors,paste("iterativeErrors_",fileID,sep=""))
 #salidas de test en bruto
 write.csv(testPred ,       paste("TestRawOutputs_",fileID,sep=""), row.names = FALSE)
 write.csv(testPredClass,   paste("TestClassOutputs_",fileID,sep=""),row.names = FALSE)
-# matrices de confusión
+# matrices de confusi?n
 write.csv(trainCm,        paste("trainCm_",fileID,sep=""))
 write.csv(testCm,         paste("testCm_",fileID,sep=""))
 
