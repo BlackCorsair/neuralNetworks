@@ -44,9 +44,9 @@ Recognition accuracy:
 
 Total accuracy:   285 entries  66.67 %
 ```
-	* ./classify -din ../test1.csv -cin trained2.cod -dout testOut1.txt
+	*./classify -din ../test1.csv -cin trained2.cod -dout testOut1.txt
 This gives us an output slightly different than the original test1.csv, _why do we do this?_ Because why not.
 
 ## Visualization
-	* ./sammon -cin trained2.cod -cout trained.sam -ps -rlen 5000
+	*./sammon -cin trained2.cod -cout trained.sam -ps -rlen 5000
 
