@@ -30,9 +30,9 @@ testInput  <- as.matrix(testInput )
 
 
 #SELECCION DE LOS PARAMETROS
-topologia        <- c(10)
-razonAprendizaje <- 0.05
-ciclosMaximos    <- 5000
+topologia        <- c(19)
+razonAprendizaje <- 0.009
+ciclosMaximos    <- 8500
 ## asignar nombre de fichero según los parámetros
 fileID <- paste("fX",fold,"_topX",paste(topologia,collapse="-"),"_ra",razonAprendizaje,"_CMX",ciclosMaximos,".csv",sep="")
 
@@ -91,7 +91,7 @@ testPredClass<-as.factor(apply(testPred,1,which.max))
 
 #GUARDADO DE RESULTADOS
 #MODELO
-saveRDS(model,             paste("nnet_",gsub("\\.csv","",fileID),".rds",sep=""))
+#saveRDS(model,             paste("nnet_",gsub("\\.csv","",fileID),".rds",sep=""))
 write.csv(accuracies,     paste("finalAccuracies_",fileID,sep=""))
 write.csv(iterativeErrors,paste("iterativeErrors_",fileID,sep=""))
 #salidas de test en bruto
