@@ -50,3 +50,13 @@ This gives us an output slightly different than the original test1.csv, _why do 
 ## Visualization
   * ./sammon -cin trained2.cod -cout trained.sam -ps -rlen 5000
 
+## Automation
+```
+./eveninit -din ../train1.csv -cout train1.cod -noc 100
+./mindist -cin train1.cod
+./balance -din ../train1.csv -cin train1.cod -cout train1.cod
+./olvq1 -din ../train1.csv -cin train1.cod -cout trained1.cod -rlen 5000
+./accuracy -din ../test1.csv -cin trained1.cod
+./classify -din ../test1.csv -cin trained1.cod -dout testOut1.txt
+
+```
