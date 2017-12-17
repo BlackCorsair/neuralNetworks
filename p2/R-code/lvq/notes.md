@@ -1,7 +1,7 @@
 # Notes about the commands used
 ## Prototype Initialization
-  * ./eveninit -din ../train2.csv -cout train2.cod -noc 2.6
-  * ./mindist -cin train2.cod
+  * ./eveninit -din ../train3.csv -cout train3.cod -noc 2.6
+  * ./mindist -cin train3.cod
 This gives us:
 ```
 	In class       van  49 units, min dist.:  0.371
@@ -10,7 +10,7 @@ This gives us:
 	In class       bus  49 units, min dist.:  0.334
 ```
 And then:
-  * ./balance -din ../train2.csv -cin train2.cod -cout trained2.cod
+  * ./balance -din ../train3.csv -cin train3.cod -cout trained3.cod
 ```
 Some codebook vectors are removed
 Some new codebook vectors are picked
@@ -27,11 +27,11 @@ _Why do we use 2.6 prototypes?_ Because the minimum number of examples for a cla
 
 ## Trainning
 We're going to use olvq2.(optimized learning-rate LVQ2. because fuck it.
-  * ./olvq2.-din ../train2.csv -cin trained2.cod -cout trained2.cod -rlen 5000
+  * ./olvq2.-din ../train3.csv -cin trained3.cod -cout trained2.cod -rlen 5000
 _Why do we use a running length of 5000?_ Because **fuck you**, thats why.
 
 ## Evaluation
-  * ./accuracy -din ../test2.csv -cin trained2.cod
+  * ./accuracy -din ../test2.csv -cin trained3.cod
 ```
 0/   0 sec. ............................................................
 
@@ -44,21 +44,21 @@ Recognition accuracy:
 
 Total accuracy:   285 entries  66.67 %
 ```
-  * ./classify -din ../test2.csv -cin trained2.cod -dout testOut2.txt
+  * ./classify -din ../test2.csv -cin trained3.cod -dout testOut2.txt
 This gives us an output slightly different than the original test2.csv, _why do we do this?_ Because why not.
 
 ## Visualization
-  * ./sammon -cin trained2.cod -cout trained.sam -ps -rlen 5000
+  * ./sammon -cin trained3.cod -cout trained.sam -ps -rlen 5000
 
 ## Automation
 ```
-./eveninit -din ../train2.csv -cout train2.cod -noc 196
-./mindist -cin train2.cod
-./balance -din ../train2.csv -cin train2.cod -cout train2.cod
-./olvq2.-din ../train2.csv -cin train2.cod -cout trained2.cod -rlen 5000
-./accuracy -din ../test2.csv -cin trained2.cod
-./classify -din ../test2.csv -cin trained2.cod -dout testOut2.txt
+./eveninit -din ../train3.csv -cout train3.cod -noc 196
+./mindist -cin train3.cod
+./balance -din ../train3.csv -cin train3.cod -cout train3.cod
+./olvq1 -din ../train3.csv -cin train3.cod -cout trained3.cod -rlen 5000
+./accuracy -din ../test2.csv -cin trained3.cod
+./classify -din ../test2.csv -cin trained3.cod -dout testOut3.txt
 
 ```
-tar cvf h2_test2.tar.gz train2.cod train2.lra trained2.cod testOut1.txt
-rm train2.cod train2.lra trained2.cod testOut2.txt 
+tar cvf h3_test2.tar.gz train3.cod train3.lra trained3.cod testOut3.txt
+rm train3.cod train3.lra trained3.cod testOut3.txt 
