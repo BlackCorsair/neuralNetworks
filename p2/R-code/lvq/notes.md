@@ -27,11 +27,11 @@ _Why do we use 196 prototypes?_ Because the minimum number of examples for a cla
 
 ## Trainning
 We're going to use olvq1 (optimized learning-rate LVQ1) because fuck it.
-  * ./olvq1 -din ../train1.csv -cin trained1.cod -cout trained2.cod -rlen 5000
+  * ./olvq1 -din ../train1.csv -cin trained1.cod -cout trained1.cod -rlen 5000
 _Why do we use a running length of 5000?_ Because **fuck you**, thats why.
 
 ## Evaluation
-  * ./accuracy -din ../test1.csv -cin trained2.cod
+  * ./accuracy -din ../test1.csv -cin trained1.cod
 ```
 0/   0 sec. ............................................................
 
@@ -44,11 +44,11 @@ Recognition accuracy:
 
 Total accuracy:   285 entries  66.67 %
 ```
-  * ./classify -din ../test1.csv -cin trained2.cod -dout testOut1.txt
+  * ./classify -din ../test1.csv -cin trained1.cod -dout testOut1.txt
 This gives us an output slightly different than the original test1.csv, _why do we do this?_ Because why not.
 
 ## Visualization
-  * ./sammon -cin trained2.cod -cout trained.sam -ps -rlen 5000
+  * ./sammon -cin trained1.cod -cout trained.sam -ps -rlen 5000
 
 ## Automation
 ```
@@ -60,3 +60,4 @@ This gives us an output slightly different than the original test1.csv, _why do 
 ./classify -din ../test1.csv -cin trained1.cod -dout testOut1.txt
 
 ```
+tar cvf h1_test1.tar.gz 
