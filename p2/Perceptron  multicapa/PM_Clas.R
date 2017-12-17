@@ -10,8 +10,8 @@ set.seed(1)
 
 fold <- 3
 # formato csv. Campos separados por comas y números con . como separador decimal
-trainSet <- read.csv(paste("Train",fold,".csv",sep=""),dec=".",sep=",",header = F)
-testSet  <- read.csv(paste("Test", fold,".csv",sep=""),dec=".",sep=",",header = F)
+trainSet <- read.csv(paste("Train",fold,".csv",sep=""),dec=".",sep=" ",header = F)
+testSet  <- read.csv(paste("Test", fold,".csv",sep=""),dec=".",sep=" ",header = F)
 
 #SELECCION DE LA SALIDA. Num de columna del target
 nTarget <- ncol(trainSet)
@@ -30,9 +30,9 @@ testInput  <- as.matrix(testInput )
 
 
 #SELECCION DE LOS PARAMETROS
-topologia        <- c(50)
+topologia        <- c(100)
 razonAprendizaje <- 0.01
-ciclosMaximos    <- 9500
+ciclosMaximos    <- 9000
 ## asignar nombre de fichero según los parámetros
 fileID <- paste("fX",fold,"_topX",paste(topologia,collapse="-"),"_ra",razonAprendizaje,"_CMX",ciclosMaximos,".csv",sep="")
 
@@ -92,12 +92,12 @@ testPredClass<-as.factor(apply(testPred,1,which.max))
 #GUARDADO DE RESULTADOS
 #MODELO
 saveRDS(model,             paste("nnet_",gsub("\\.csv","",fileID),".rds",sep=""))
-#write.csv(accuracies,     paste("finalAccuracies_",fileID,sep=""))
-#write.csv(iterativeErrors,paste("iterativeErrors_",fileID,sep=""))
+write.csv(accuracies,     paste("finalAccuracies_",fileID,sep=""))
+write.csv(iterativeErrors,paste("iterativeErrors_",fileID,sep=""))
 #salidas de test en bruto
-#write.csv(testPred ,       paste("TestRawOutputs_",fileID,sep=""), row.names = FALSE)
-#write.csv(testPredClass,   paste("TestClassOutputs_",fileID,sep=""),row.names = FALSE)
+write.csv(testPred ,       paste("TestRawOutputs_",fileID,sep=""), row.names = FALSE)
+write.csv(testPredClass,   paste("TestClassOutputs_",fileID,sep=""),row.names = FALSE)
 # matrices de confusión
-#write.csv(trainCm,        paste("trainCm_",fileID,sep=""))
-#write.csv(testCm,         paste("testCm_",fileID,sep=""))
+write.csv(trainCm,        paste("trainCm_",fileID,sep=""))
+write.csv(testCm,         paste("testCm_",fileID,sep=""))
 
